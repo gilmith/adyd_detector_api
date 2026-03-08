@@ -1,0 +1,100 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Blank API",
+    "version": "0.0.2",
+    "description": "This is a simple API descriptor."
+  },
+  "paths": {
+    "/files/{bucket_name}": {
+      "get": {
+        "tags": [
+          "File-Controller"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/BucketFileListResponse"
+          }
+        },
+        "operationId": "list_monster_files",
+        "summary": "list_monster_files"
+      },
+      "parameters": [
+        {
+          "name": "bucket_name",
+          "schema": {
+            "type": "string"
+          },
+          "in": "path",
+          "required": true
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "BucketFileListDto": {
+        "description": "",
+        "required": [
+          "bucket",
+          "files_info"
+        ],
+        "type": "object",
+        "properties": {
+          "bucket": {
+            "description": "",
+            "type": "string"
+          },
+          "files_info": {
+            "description": "",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FileInfoStorageDto"
+            }
+          }
+        }
+      },
+      "FileInfoStorageDto": {
+        "description": "",
+        "required": [
+          "file_name",
+          "file_size",
+          "unit",
+          "content_type"
+        ],
+        "type": "object",
+        "properties": {
+          "file_name": {
+            "description": "",
+            "type": "string"
+          },
+          "file_size": {
+            "format": "int64",
+            "description": "",
+            "type": "integer"
+          },
+          "unit": {
+            "description": "",
+            "type": "string"
+          },
+          "content_type": {
+            "description": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BucketFileListResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BucketFileListDto"
+            }
+          }
+        },
+        "description": ""
+      }
+    }
+  }
+}
