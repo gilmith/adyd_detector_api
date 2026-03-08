@@ -1,0 +1,26 @@
+[project]
+name = "adyd_detector_api"
+version = "0.1.0"
+description = "API para ADYD Detector"
+authors = [
+    {name = "JacoboGeadaAnsino", email = "jacobo.geada.ansino@gmail.com"}
+]
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "python-dateutil>=2.8.2",
+    "fastapi (>=0.135.1,<0.136.0)"
+]
+
+[tool.poetry]
+package-mode = true
+
+[tool.poe.tasks]
+#generate = "openapi-generator-cli generate -i adyd_detector_api/openapi.yaml -g python-fastapi --package-name adyd_detector_api -o ./ --global-property models,apis --additional-properties=interfaceOnly=true,usePydanticV2=true,skipOperationExample=true"
+generate = "openapi-generator-cli generate -i adyd_detector_api/openapi.yaml -g python-fastapi -o ./adyd_detector_api --package-name adyd_detector_api.generated --global-property models,apis --additional-properties=interfaceOnly=true,usePydanticV2=true"
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "poethepoet (>=0.42.1,<0.43.0)"
+]
