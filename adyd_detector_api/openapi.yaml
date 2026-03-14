@@ -1,100 +1,186 @@
-{
-  "openapi": "3.0.3",
-  "info": {
-    "title": "Blank API",
-    "version": "0.0.2",
-    "description": "This is a simple API descriptor."
-  },
-  "paths": {
-    "/files/{bucket_name}": {
-      "get": {
-        "tags": [
-          "File-Controller"
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/BucketFileListResponse"
-          }
-        },
-        "operationId": "list_monster_files",
-        "summary": "list_monster_files"
-      },
-      "parameters": [
-        {
-          "name": "bucket_name",
-          "schema": {
-            "type": "string"
-          },
-          "in": "path",
-          "required": true
-        }
-      ]
-    }
-  },
-  "components": {
-    "schemas": {
-      "BucketFileListDto": {
-        "description": "",
-        "required": [
-          "bucket",
-          "files_info"
-        ],
-        "type": "object",
-        "properties": {
-          "bucket": {
-            "description": "",
-            "type": "string"
-          },
-          "files_info": {
-            "description": "",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FileInfoStorageDto"
-            }
-          }
-        }
-      },
-      "FileInfoStorageDto": {
-        "description": "",
-        "required": [
-          "file_name",
-          "file_size",
-          "unit",
-          "content_type"
-        ],
-        "type": "object",
-        "properties": {
-          "file_name": {
-            "description": "",
-            "type": "string"
-          },
-          "file_size": {
-            "format": "int64",
-            "description": "",
-            "type": "integer"
-          },
-          "unit": {
-            "description": "",
-            "type": "string"
-          },
-          "content_type": {
-            "description": "",
-            "type": "string"
-          }
-        }
-      }
-    },
-    "responses": {
-      "BucketFileListResponse": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/BucketFileListDto"
-            }
-          }
-        },
-        "description": ""
-      }
-    }
-  }
-}
+openapi: 3.0.3
+info:
+    title: Blank API
+    version: 0.0.2
+    description: This is a simple API descriptor.
+paths:
+    /files/{bucket_name}:
+        get:
+            tags:
+                - File-Controller
+            responses:
+                "200":
+                    $ref: "#/components/responses/BucketFileListResponse"
+            operationId: list_monster_files
+            summary: list_monster_files
+        parameters:
+            - name: bucket_name
+              schema:
+                  type: string
+              in: path
+              required: true
+    /files/{bucket_name}/{file_name}:
+        post:
+            tags:
+                - File-Controller
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/MessageDto"
+                    description: ok
+                "500":
+                    $ref: "#/components/responses/SimpleErrorResponse"
+            operationId: insert_file
+            summary: insert_file
+        parameters:
+            - name: bucket_name
+              schema:
+                  type: string
+              in: path
+              required: true
+            - name: file_name
+              schema:
+                  type: string
+              in: path
+              required: true
+    /files/{bucket_name}/{file_name}/split:
+        post:
+            tags:
+                - File-Controller
+            parameters:
+                - name: bucket_name
+                  schema:
+                      type: string
+                  in: path
+                  required: true
+                - name: file_name
+                  schema:
+                      type: string
+                  in: path
+                  required: true
+            responses:
+                "200":
+                    $ref: "#/components/responses/SimpleMessageResponse"
+                "500":
+                    $ref: "#/components/responses/SimpleErrorResponse"
+            operationId: split_file
+            summary: split_file
+    /files/{bucket_name}/{file_name}/train:
+        post:
+            tags:
+                - File-Controller
+            responses:
+                "200":
+                    $ref: "#/components/responses/SimpleMessageResponse"
+                "500":
+                    $ref: "#/components/responses/SimpleErrorResponse"
+            operationId: execute_yolo
+            summary: execute_yolo
+            description: execute_yolo
+        parameters:
+            - name: bucket_name
+              schema:
+                  type: string
+              in: path
+              required: true
+            - name: file_name
+              schema:
+                  type: string
+              in: path
+              required: true
+    /files/{bucket_name}/detect:
+        post:
+            tags:
+                - File-Controller
+            responses:
+                "200":
+                    $ref: "#/components/responses/SimpleMessageResponse"
+                "500":
+                    $ref: "#/components/responses/SimpleErrorResponse"
+            operationId: execute_detect
+            summary: execute_detect
+            description: v
+        parameters:
+            - name: bucket_name
+              schema:
+                  type: string
+              in: path
+              required: true
+components:
+    schemas:
+        BucketFileListDto:
+            description: ""
+            required:
+                - bucket
+                - files_info
+            type: object
+            properties:
+                bucket:
+                    description: ""
+                    type: string
+                files_info:
+                    description: ""
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/FileInfoStorageDto"
+        FileInfoStorageDto:
+            description: ""
+            required:
+                - file_name
+                - file_size
+                - unit
+                - content_type
+            type: object
+            properties:
+                file_name:
+                    description: ""
+                    type: string
+                file_size:
+                    format: int64
+                    description: ""
+                    type: integer
+                unit:
+                    description: ""
+                    type: string
+                content_type:
+                    description: ""
+                    type: string
+        MessageDto:
+            description: ""
+            required:
+                - message
+            type: object
+            properties:
+                message:
+                    description: ""
+                    type: string
+        ErrorDto:
+            description: ""
+            required:
+                - error
+            type: object
+            properties:
+                error:
+                    description: ""
+                    type: string
+    responses:
+        BucketFileListResponse:
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/BucketFileListDto"
+            description: ""
+        SimpleMessageResponse:
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/MessageDto"
+            description: ""
+        SimpleErrorResponse:
+            content:
+                application/json:
+                    schema:
+                        $ref: "#/components/schemas/ErrorDto"
+            description: ""
