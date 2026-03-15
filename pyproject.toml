@@ -1,12 +1,14 @@
 [tool.poetry]
 name = "adyd-detector-api"
-version = "0.1.1"
+version = "0.1.12"
 description = "API para ADYD Detector"
 authors = ["JacoboGeadaAnsino <jacobo.geada.ansino@gmail.com>"]
 readme = "README.md"
 packages = [{include = "adyd_detector_api"}]
 repository = "https://github.com/gilmith/adyd_detector_api"
-
+include = [
+    { path = "adyd_detector_api/openapi.yaml", format = ["sdist", "wheel"] }
+]
 [tool.poetry.dependencies]
 python = "^3.12"
 python-dateutil = ">=2.8.2"
@@ -18,7 +20,7 @@ pydantic = "^2.0"
 poethepoet = ">=0.42.1"
 
 [tool.poe.tasks]
-generate = "openapi-generator-cli generate -i adyd_detector_api/openapi.yaml -g python-flask -o ./ --package-name adyd_detector_api --global-property models,apis --additional-properties=interfaceOnly=true,generateSourceCodeOnly=true"
+generate = "openapi-generator-cli generate -i adyd_detector_api/openapi.yaml -g python-flask -o ./ --package-name adyd_detector_api --additional-properties=interfaceOnly=true,generateSourceCodeOnly=true"
 publish = "poetry publish --build"
 
 [build-system]

@@ -1,18 +1,19 @@
 openapi: 3.0.3
 info:
     title: Blank API
-    version: 0.0.2
+    version: 0.0.4
     description: This is a simple API descriptor.
 paths:
     /files/{bucket_name}:
         get:
             tags:
-                - File-Controller
+                - FileController
             responses:
                 "200":
                     $ref: "#/components/responses/BucketFileListResponse"
+            summary: src.main.infraestructure.rest.list_monster_files
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             operationId: list_monster_files
-            summary: list_monster_files
         parameters:
             - name: bucket_name
               schema:
@@ -22,7 +23,7 @@ paths:
     /files/{bucket_name}/{file_name}:
         post:
             tags:
-                - File-Controller
+                - FileController
             responses:
                 "200":
                     content:
@@ -34,6 +35,7 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: insert_file
             summary: insert_file
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
@@ -48,7 +50,7 @@ paths:
     /files/{bucket_name}/{file_name}/split:
         post:
             tags:
-                - File-Controller
+                - FileController
             parameters:
                 - name: bucket_name
                   schema:
@@ -67,16 +69,18 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: split_file
             summary: split_file
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /files/{bucket_name}/{file_name}/train:
         post:
             tags:
-                - File-Controller
+                - FileController
             responses:
                 "200":
                     $ref: "#/components/responses/SimpleMessageResponse"
                 "500":
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: execute_yolo
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             summary: execute_yolo
             description: execute_yolo
         parameters:
@@ -93,7 +97,7 @@ paths:
     /files/{bucket_name}/detect:
         post:
             tags:
-                - File-Controller
+                - FileController
             responses:
                 "200":
                     $ref: "#/components/responses/SimpleMessageResponse"
@@ -101,6 +105,7 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: execute_detect
             summary: execute_detect
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             description: v
         parameters:
             - name: bucket_name
