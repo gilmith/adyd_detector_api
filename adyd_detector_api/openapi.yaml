@@ -1,29 +1,29 @@
 openapi: 3.0.3
 info:
     title: Blank API
-    version: 0.0.4
+    version: 0.0.2
     description: This is a simple API descriptor.
 paths:
     /files/{bucket_name}:
         get:
             tags:
-                - FileController
+                - File-Controller
             responses:
                 "200":
                     $ref: "#/components/responses/BucketFileListResponse"
-            summary: src.main.infraestructure.rest.list_monster_files
-            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             operationId: list_monster_files
+            summary: list_monster_files
         parameters:
             - name: bucket_name
               schema:
                   type: string
               in: path
               required: true
+        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /files/{bucket_name}/{file_name}:
         post:
             tags:
-                - FileController
+                - File-Controller
             responses:
                 "200":
                     content:
@@ -35,7 +35,6 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: insert_file
             summary: insert_file
-            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
@@ -47,10 +46,11 @@ paths:
                   type: string
               in: path
               required: true
+        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /files/{bucket_name}/{file_name}/split:
         post:
             tags:
-                - FileController
+                - File-Controller
             parameters:
                 - name: bucket_name
                   schema:
@@ -69,18 +69,17 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: split_file
             summary: split_file
-            x-openapi-router-controller: src.main.infraestructure.rest.Jump
-    /files/{bucket_name}/{file_name}/train:
+        x-openapi-router-controller: src.main.infraestructure.rest.Jump
+    /yolo/{bucket_name}/{file_name}/train:
         post:
             tags:
-                - FileController
+                - YoloController
             responses:
                 "200":
                     $ref: "#/components/responses/SimpleMessageResponse"
                 "500":
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: execute_yolo
-            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             summary: execute_yolo
             description: execute_yolo
         parameters:
@@ -94,10 +93,18 @@ paths:
                   type: string
               in: path
               required: true
-    /files/{bucket_name}/detect:
+        x-openapi-router-controller: src.main.infraestructure.rest.Jump
+    /yolo/{bucket_name}/detect/{file_name}:
         post:
+            requestBody:
+                description: DetectDto
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DetectDto"
+                required: true
             tags:
-                - FileController
+                - YoloController
             responses:
                 "200":
                     $ref: "#/components/responses/SimpleMessageResponse"
@@ -105,7 +112,6 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: execute_detect
             summary: execute_detect
-            x-openapi-router-controller: src.main.infraestructure.rest.Jump
             description: v
         parameters:
             - name: bucket_name
@@ -113,6 +119,36 @@ paths:
                   type: string
               in: path
               required: true
+            - name: file_name
+              schema:
+                  type: string
+              in: path
+              required: true
+        x-openapi-router-controller: src.main.infraestructure.rest.Jump
+    /yolo/{bucket_name}/detect/all:
+        post:
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/DetectDto"
+                required: true
+            tags:
+                - YoloController
+            parameters:
+                - name: bucket_name
+                  schema:
+                      type: string
+                  in: path
+                  required: true
+            responses:
+                "200":
+                    description: ok
+                "400":
+                    $ref: "#/components/responses/SimpleErrorResponse"
+            operationId: execute_detect_all
+            summary: execute detect all files in bucket
+            description: execute detect all files in bucket
 components:
     schemas:
         BucketFileListDto:
@@ -170,6 +206,28 @@ components:
                 error:
                     description: ""
                     type: string
+        DetectDto:
+            description: ""
+            type: object
+            properties:
+                show:
+                    description: If True, displays the annotated images or videos in a window.
+                        Useful for immediate visual feedback during development
+                        or testing.
+                    type: boolean
+                save:
+                    description: Enables saving of the annotated images or videos to files. Useful
+                        for documentation, further analysis, or sharing results.
+                        Defaults to True when using CLI & False when used in
+                        Python.
+                    type: boolean
+                show_labels:
+                    description: Displays labels for each detection in the visual output. Provides
+                        immediate understanding of detected objects.
+                    type: boolean
+                show_boxes:
+                    description: ""
+                    type: boolean
     responses:
         BucketFileListResponse:
             content:
