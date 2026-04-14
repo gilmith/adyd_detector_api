@@ -13,13 +13,13 @@ paths:
                     $ref: "#/components/responses/BucketFileListResponse"
             operationId: list_monster_files
             summary: list_monster_files
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
                   type: string
               in: path
               required: true
-        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /files/{bucket_name}/{file_name}:
         post:
             tags:
@@ -35,6 +35,7 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: insert_file
             summary: insert_file
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
@@ -46,7 +47,6 @@ paths:
                   type: string
               in: path
               required: true
-        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /files/{bucket_name}/{file_name}/split:
         post:
             tags:
@@ -69,7 +69,7 @@ paths:
                     $ref: "#/components/responses/SimpleErrorResponse"
             operationId: split_file
             summary: split_file
-        x-openapi-router-controller: src.main.infraestructure.rest.Jump
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /yolo/{bucket_name}/{file_name}/train:
         post:
             tags:
@@ -82,6 +82,7 @@ paths:
             operationId: execute_yolo
             summary: execute_yolo
             description: execute_yolo
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
@@ -93,7 +94,6 @@ paths:
                   type: string
               in: path
               required: true
-        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /yolo/{bucket_name}/detect/{file_name}:
         post:
             requestBody:
@@ -113,6 +113,7 @@ paths:
             operationId: execute_detect
             summary: execute_detect
             description: v
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
         parameters:
             - name: bucket_name
               schema:
@@ -124,7 +125,6 @@ paths:
                   type: string
               in: path
               required: true
-        x-openapi-router-controller: src.main.infraestructure.rest.Jump
     /yolo/{bucket_name}/detect/all:
         post:
             requestBody:
@@ -149,6 +149,7 @@ paths:
             operationId: execute_detect_all
             summary: execute detect all files in bucket
             description: execute detect all files in bucket
+            x-openapi-router-controller: src.main.infraestructure.rest.Jump
 components:
     schemas:
         BucketFileListDto:
@@ -228,6 +229,9 @@ components:
                 show_boxes:
                     description: ""
                     type: boolean
+                confidence:
+                    description: "decimal value of confidence between 0 and 1 "
+                    type: number
     responses:
         BucketFileListResponse:
             content:

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "adyd-detector-api"
-version = "0.2.0"
+version = "0.2.3"
 description = "API para ADYD Detector"
 authors = ["JacoboGeadaAnsino <jacobo.geada.ansino@gmail.com>"]
 readme = "README.md"
